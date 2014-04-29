@@ -3,6 +3,7 @@ package vaadin.test.richtext.client;
 import com.google.gwt.event.dom.client.BlurEvent;
 import com.google.gwt.event.dom.client.BlurHandler;
 import com.google.gwt.user.client.Event;
+import com.google.gwt.user.client.ui.RichTextArea;
 import com.vaadin.client.ApplicationConnection;
 import com.vaadin.client.Paintable;
 import com.vaadin.client.UIDL;
@@ -16,6 +17,12 @@ import vaadin.test.richtext.CRichTextArea;
 @Connect(value = CRichTextArea.class, loadStyle = LoadStyle.LAZY)
 public class CRichTextAreaConnector extends AbstractFieldConnector implements
         Paintable, BeforeShortcutActionListener {
+
+   private static final vaadin.test.richtext.client.CRichTextArea.FontSize[] fontSizesConstants = new vaadin.test.richtext.client.CRichTextArea.FontSize[] {
+           vaadin.test.richtext.client.CRichTextArea.FontSize.XX_SMALL, vaadin.test.richtext.client.CRichTextArea.FontSize.X_SMALL,
+           vaadin.test.richtext.client.CRichTextArea.FontSize.SMALL, vaadin.test.richtext.client.CRichTextArea.FontSize.MEDIUM,
+           vaadin.test.richtext.client.CRichTextArea.FontSize.LARGE, vaadin.test.richtext.client.CRichTextArea.FontSize.X_LARGE,
+           vaadin.test.richtext.client.CRichTextArea.FontSize.XX_LARGE };
 
    /*
     * Last value received from the server
@@ -37,6 +44,21 @@ public class CRichTextAreaConnector extends AbstractFieldConnector implements
    public void updateFromUIDL(final UIDL uidl, ApplicationConnection client) {
       getWidget().client = client;
       getWidget().id = uidl.getId();
+
+      if (uidl.hasAttribute("fontName")) {
+         RichTextArea.FontSize fontSize = null;
+
+         if (uidl.hasAttribute("fontSize")) {
+            int fontSizeValue = uidl.getIntAttribute("fontSize");
+            for (RichTextArea.FontSize fontSizesConstant : fontSizesConstants) {
+               if (fontSizesConstant.getNumber() == fontSizeValue) {
+                  fontSize = fontSizesConstant;
+               }
+            }
+         }
+
+         getWidget().setFont(uidl.getStringAttribute("fontName"), fontSize);
+      }
 
       if (uidl.hasVariable("text")) {
          String newValue = uidl.getStringVariable("text");

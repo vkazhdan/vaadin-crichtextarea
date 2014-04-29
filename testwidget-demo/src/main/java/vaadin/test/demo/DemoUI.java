@@ -25,7 +25,8 @@ public class DemoUI extends UI {
    protected void init(VaadinRequest request) {
 
       // Initialize our new UI component
-      CRichTextArea component = new CRichTextArea();
+      final CRichTextArea component = new CRichTextArea();
+      component.setFont("Verdana", 2);
 
       VerticalLayout layout = new VerticalLayout();
       layout.setSizeFull();

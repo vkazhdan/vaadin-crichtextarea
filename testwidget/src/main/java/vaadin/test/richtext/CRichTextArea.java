@@ -2,6 +2,7 @@ package vaadin.test.richtext;
 
 import java.util.Map;
 
+import com.google.gwt.user.client.ui.RichTextArea;
 import com.vaadin.data.Property;
 import com.vaadin.server.PaintException;
 import com.vaadin.server.PaintTarget;
@@ -35,6 +36,17 @@ public class CRichTextArea extends AbstractField<String> implements
     * paint. Reset to false after painted.
     */
    private boolean selectAll = false;
+
+   /**
+    * Font name.
+    */
+   private String fontName = null;
+
+
+   /**
+    * Font size.
+    */
+   private int fontSize;
 
    /**
     * Constructs an empty <code>RichTextArea</code> with no caption.
@@ -92,6 +104,14 @@ public class CRichTextArea extends AbstractField<String> implements
       if (selectAll) {
          target.addAttribute("selectAll", true);
          selectAll = false;
+      }
+
+      if (fontName != null) {
+         target.addAttribute("fontName", fontName);
+      }
+
+      if (fontSize != 0) {
+         target.addAttribute("fontSize", fontSize);
       }
 
       // Adds the content as variable
@@ -265,6 +285,18 @@ public class CRichTextArea extends AbstractField<String> implements
    @Override
    protected boolean isEmpty() {
       return super.isEmpty() || getValue().length() == 0;
+   }
+
+   /**
+    * Set font.
+    *
+    * @param fontName font name
+    * @param fontSize font size. NOTE: Should be only value from {@link RichTextArea.FontSize}, or 0 if do not set!
+    */
+   public void setFont(String fontName, int fontSize) {
+      this.fontName = fontName;
+      this.fontSize = fontSize;
+      markAsDirty();
    }
 
 }

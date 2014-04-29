@@ -1,9 +1,5 @@
 package vaadin.test.richtext.client;
 
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Map.Entry;
-
 import com.google.gwt.core.client.Scheduler;
 import com.google.gwt.event.dom.client.BlurHandler;
 import com.google.gwt.event.dom.client.KeyDownEvent;
@@ -19,6 +15,7 @@ import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.Focusable;
 import com.google.gwt.user.client.ui.HTML;
+import com.google.gwt.user.client.ui.RichTextArea;
 import com.google.gwt.user.client.ui.Widget;
 import com.vaadin.client.ApplicationConnection;
 import com.vaadin.client.BrowserInfo;
@@ -28,12 +25,16 @@ import com.vaadin.client.ui.Field;
 import com.vaadin.client.ui.ShortcutActionHandler;
 import com.vaadin.client.ui.ShortcutActionHandler.ShortcutActionHandlerOwner;
 import com.vaadin.client.ui.TouchScrollDelegate;
+import com.vaadin.client.ui.richtextarea.VRichTextToolbar;
+
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Map.Entry;
 
 /**
  * This class implements a basic client side rich text editor component.
  *
  * @author Vaadin Ltd.
- *
  */
 public class CVRichTextArea extends Composite implements Field, KeyPressHandler,
         KeyDownHandler, Focusable {
@@ -43,21 +44,31 @@ public class CVRichTextArea extends Composite implements Field, KeyPressHandler,
     */
    public static final String CLASSNAME = "v-richtextarea";
 
-   /** For internal use only. May be removed or replaced in the future. */
+   /**
+    * For internal use only. May be removed or replaced in the future.
+    */
    public String id;
 
-   /** For internal use only. May be removed or replaced in the future. */
+   /**
+    * For internal use only. May be removed or replaced in the future.
+    */
    public ApplicationConnection client;
 
-   /** For internal use only. May be removed or replaced in the future. */
+   /**
+    * For internal use only. May be removed or replaced in the future.
+    */
    public boolean immediate = false;
 
-   /** For internal use only. May be removed or replaced in the future. */
+   /**
+    * For internal use only. May be removed or replaced in the future.
+    */
    public CRichTextArea rta;
 
-   private CVRichTextToolbar formatter;
+   private VRichTextToolbar formatter;
 
-   /** For internal use only. May be removed or replaced in the future. */
+   /**
+    * For internal use only. May be removed or replaced in the future.
+    */
    public HTML html = new HTML();
 
    private final FlowPanel fp = new FlowPanel();
@@ -67,12 +78,16 @@ public class CVRichTextArea extends Composite implements Field, KeyPressHandler,
    private int extraHorizontalPixels = -1;
    private int extraVerticalPixels = -1;
 
-   /** For internal use only. May be removed or replaced in the future. */
+   /**
+    * For internal use only. May be removed or replaced in the future.
+    */
    public int maxLength = -1;
 
    private int toolbarNaturalWidth = 500;
 
-   /** For internal use only. May be removed or replaced in the future. */
+   /**
+    * For internal use only. May be removed or replaced in the future.
+    */
    public HandlerRegistration keyPressHandler;
 
    private ShortcutActionHandlerOwner hasShortcutActionHandler;
@@ -96,7 +111,7 @@ public class CVRichTextArea extends Composite implements Field, KeyPressHandler,
       rta = new CRichTextArea();
       rta.setWidth("100%");
       rta.addKeyDownHandler(this);
-      formatter = new CVRichTextToolbar(rta);
+      formatter = new VRichTextToolbar(rta);
 
       // Add blur handlers
       for (Entry<BlurHandler, HandlerRegistration> handler : blurHandlers
@@ -138,7 +153,9 @@ public class CVRichTextArea extends Composite implements Field, KeyPressHandler,
       setValue(value);
    }
 
-   /** For internal use only. May be removed or replaced in the future. */
+   /**
+    * For internal use only. May be removed or replaced in the future.
+    */
    public void selectAll() {
         /*
          * There is a timing issue if trying to select all immediately on first
@@ -300,7 +317,8 @@ public class CVRichTextArea extends Composite implements Field, KeyPressHandler,
          shortcutHandler
                  .handleKeyboardEvent(com.google.gwt.user.client.Event
                                  .as(event.getNativeEvent()),
-                         ConnectorMap.get(client).getConnector(this));
+                         ConnectorMap.get(client).getConnector(this)
+                 );
       }
    }
 
@@ -351,8 +369,7 @@ public class CVRichTextArea extends Composite implements Field, KeyPressHandler,
    /**
     * Set the value of the text area
     *
-    * @param value
-    *            The text value. Can be html.
+    * @param value The text value. Can be html.
     */
    public void setValue(String value) {
       if (rta.isAttached()) {
@@ -406,8 +423,7 @@ public class CVRichTextArea extends Composite implements Field, KeyPressHandler,
    /**
     * Adds a blur handler to the component.
     *
-    * @param blurHandler
-    *            the blur handler to add
+    * @param blurHandler the blur handler to add
     */
    public void addBlurHandler(BlurHandler blurHandler) {
       blurHandlers.put(blurHandler, rta.addBlurHandler(blurHandler));
@@ -416,14 +432,26 @@ public class CVRichTextArea extends Composite implements Field, KeyPressHandler,
    /**
     * Removes a blur handler.
     *
-    * @param blurHandler
-    *            the handler to remove
+    * @param blurHandler the handler to remove
     */
    public void removeBlurHandler(BlurHandler blurHandler) {
       HandlerRegistration registration = blurHandlers.remove(blurHandler);
       if (registration != null) {
          registration.removeHandler();
       }
+   }
+
+   public void setFont(final String fontName, final RichTextArea.FontSize fontSize) {
+      Scheduler.get().scheduleDeferred(new Scheduler.ScheduledCommand() {
+         @Override
+         public void execute() {
+            rta.getFormatter().setFontName(fontName);
+
+            if (fontSize != null) {
+               rta.getFormatter().setFontSize(fontSize);
+            }
+         }
+      });
    }
 }
 
