@@ -60,6 +60,10 @@ public class CRichTextAreaConnector extends AbstractFieldConnector implements
          getWidget().setFont(uidl.getStringAttribute("fontName"), fontSize);
       }
 
+      if (uidl.hasAttribute("insertHtml")) {
+         getWidget().insertHtml(uidl.getStringAttribute("insertHtml"));
+      }
+
       if (uidl.hasVariable("text")) {
          String newValue = uidl.getStringVariable("text");
          if (!SharedUtil.equals(newValue, cachedValue)) {

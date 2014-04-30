@@ -453,5 +453,14 @@ public class CVRichTextArea extends Composite implements Field, KeyPressHandler,
          }
       });
    }
+
+   public void insertHtml(final String html) {
+      Scheduler.get().scheduleDeferred(new Scheduler.ScheduledCommand() {
+         @Override
+         public void execute() {
+            rta.getFormatter().insertHTML(html);
+         }
+      });
+   }
 }
 

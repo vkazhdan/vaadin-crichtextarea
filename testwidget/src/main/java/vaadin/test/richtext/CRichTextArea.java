@@ -49,6 +49,11 @@ public class CRichTextArea extends AbstractField<String> implements
    private int fontSize;
 
    /**
+    * HTML to insert.
+    */
+   private String insertHtml = null;
+
+   /**
     * Constructs an empty <code>RichTextArea</code> with no caption.
     */
    public CRichTextArea() {
@@ -112,6 +117,11 @@ public class CRichTextArea extends AbstractField<String> implements
 
       if (fontSize != 0) {
          target.addAttribute("fontSize", fontSize);
+      }
+
+      if (insertHtml != null) {
+         target.addAttribute("insertHtml", insertHtml);
+         insertHtml = null;
       }
 
       // Adds the content as variable
@@ -299,4 +309,8 @@ public class CRichTextArea extends AbstractField<String> implements
       markAsDirty();
    }
 
+   public void insertHtml(String html) {
+      this.insertHtml = html;
+      markAsDirty();
+   }
 }

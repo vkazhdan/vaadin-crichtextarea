@@ -5,6 +5,7 @@ import com.vaadin.annotations.Title;
 import com.vaadin.annotations.VaadinServletConfiguration;
 import com.vaadin.server.VaadinRequest;
 import com.vaadin.server.VaadinServlet;
+import com.vaadin.ui.Button;
 import com.vaadin.ui.UI;
 import com.vaadin.ui.VerticalLayout;
 import vaadin.test.richtext.CRichTextArea;
@@ -31,6 +32,15 @@ public class DemoUI extends UI {
       VerticalLayout layout = new VerticalLayout();
       layout.setSizeFull();
       layout.addComponent(component);
+
+      Button testButton = new Button("test");
+      testButton.addClickListener(new Button.ClickListener() {
+         @Override
+         public void buttonClick(Button.ClickEvent event) {
+            component.insertHtml("<b>bold HTML<b>");
+         }
+      });
+      layout.addComponent(testButton);
 
       setContent(layout);
    }
