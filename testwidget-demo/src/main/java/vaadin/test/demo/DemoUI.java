@@ -26,21 +26,31 @@ public class DemoUI extends UI {
    protected void init(VaadinRequest request) {
 
       // Initialize our new UI component
+      VerticalLayout layout = new VerticalLayout();
+      layout.setSizeFull();
+
       final CRichTextArea component = new CRichTextArea();
       component.setFont("Verdana", 2);
 
-      VerticalLayout layout = new VerticalLayout();
-      layout.setSizeFull();
-      layout.addComponent(component);
-
-      Button testButton = new Button("test");
+      Button testButton = new Button("test setFont");
       testButton.addClickListener(new Button.ClickListener() {
+         @Override
+         public void buttonClick(Button.ClickEvent event) {
+            component.setFont("Verdana", 6);
+         }
+      });
+      layout.addComponent(testButton);
+
+      Button testButton2 = new Button("test insertHtml");
+      testButton2.addClickListener(new Button.ClickListener() {
          @Override
          public void buttonClick(Button.ClickEvent event) {
             component.insertHtml("<b>bold HTML<b>");
          }
       });
-      layout.addComponent(testButton);
+      layout.addComponent(testButton2);
+
+      layout.addComponent(component);
 
       setContent(layout);
    }

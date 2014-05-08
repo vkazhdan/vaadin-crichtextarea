@@ -442,16 +442,18 @@ public class CVRichTextArea extends Composite implements Field, KeyPressHandler,
    }
 
    public void setFont(final String fontName, final RichTextArea.FontSize fontSize) {
-      Scheduler.get().scheduleDeferred(new Scheduler.ScheduledCommand() {
+      Scheduler.get().scheduleFixedDelay(new Scheduler.RepeatingCommand() { // Need a delay for Firefox browser
          @Override
-         public void execute() {
+         public boolean execute() {
             rta.getFormatter().setFontName(fontName);
 
             if (fontSize != null) {
                rta.getFormatter().setFontSize(fontSize);
             }
+
+            return false;
          }
-      });
+      }, 100);
    }
 
    public void insertHtml(final String html) {
